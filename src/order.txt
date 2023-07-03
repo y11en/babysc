@@ -9,9 +9,6 @@ init_api
 strlen_me
 
 
-
-
-
-
+sc_msgbox
 _main
 main_end
