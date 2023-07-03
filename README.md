@@ -1,7 +1,7 @@
 # babysc
  自用的shellcode生成框架
 
-# 用法
+## 用法
 1, 自己写好功能函数
 2, 将函数名称放到 `order.txt` 文件里面`_main`前面即可
 3, 编译下,确认生成了exe文件
@@ -11,8 +11,6 @@
 
 例子：
 写一个`winexe`方式命令执行
-
-
 
 1, 先完成功能函数
 
@@ -37,6 +35,8 @@ void* sc_exec()
 2, 将 `sc_exec` 放到 `order.txt` 里面
 3, 编译，执行下
 
-
+## 其他
+1, 批量提取kernel32, ntdll hash的工具有需要的话找找传上来
+2, 代码生成 Release 版用 MT , 务必!
 
 ![演示](demo.png)
