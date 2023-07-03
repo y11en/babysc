@@ -1,0 +1,17 @@
+main_entry
+get_rtoffset
+get_kernel32
+
+get_export_byhash
+get_import_module
+calc_hash
+init_api
+strlen_me
+
+
+
+
+
+
+_main
+main_end
