@@ -12,10 +12,11 @@
 例子：
 写一个`winexe`方式命令执行
 
-```
+
 
 1, 先完成功能函数
 
+```C
 void* sc_exec()
 {
 	NativeApi func;	// 上下文，里面有需要用到的`全局`变量
@@ -31,8 +32,11 @@ void* sc_exec()
 	func.winexec(cmdline, SW_SHOW);
 	return 0;
 }
+```
 
 2, 将 `sc_exec` 放到 `order.txt` 里面
 3, 编译，执行下
 
-```
+
+
+![演示](demo.png)
