@@ -50,9 +50,10 @@ main_end
 ```
 
 3. 编译，执行下
+![演示](demo.png)
 
 ## 其他
 1. 批量提取kernel32, ntdll hash的工具有需要的话找找传上来
 2. 代码生成 Release 版用 MT , 务必!
 
-![演示](demo.png)
+
