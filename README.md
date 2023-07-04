@@ -25,6 +25,7 @@ void* sc_exec()
 	
 	// 方式二：将要执行的命令放在shellcode后面（需要你自己加到“shellcode导出文件”尾部），这样的好处就是，shellcode生成一次
 	// 要执行的命令可以通过重新修改尾部数据达到动态修改功能的目的
+	// 当然，放哪里都行，能找到地址就好
 	// char* cmdline = (char*)main_end + (UINT32)get_rtoffset();
 	
 	
