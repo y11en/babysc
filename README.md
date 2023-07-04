@@ -22,7 +22,8 @@ void* sc_exec()
 	// 方式一：硬编码你的命令
 	char cmdline[] = { 109, 115, 112, 97, 105, 110, 116, 46, 101, 120, 101 , 0 };	// mspaint.exe
 	
-	// 方式二：将要执行的命令放在我shellcode后面（需要你自己加到“shellcode导出文件”尾部），这样的好处就是，shellcode生成一次，要执行的命令可以通过修改尾部数据达到动态修改的目的
+	// 方式二：将要执行的命令放在shellcode后面（需要你自己加到“shellcode导出文件”尾部），这样的好处就是，shellcode生成一次
+	// 要执行的命令可以通过重新修改尾部数据达到动态修改功能的目的
 	// char* cmdline = (char*)main_end + (UINT32)get_rtoffset();
 	
 	
