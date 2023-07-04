@@ -7,7 +7,7 @@
 #include "sc.h"
 #include "mypeb.h"
 
-// ¼ÆËãÔËĞĞÊ±Óë±àÒëÆÚ´úÂëÆ«ÒÆ
+// è®¡ç®—è¿è¡Œæ—¶ä¸ç¼–è¯‘æœŸä»£ç åç§»
 uint32_t get_rtoffset()
 {
 	uint32_t r = 0;
@@ -56,7 +56,7 @@ LONG_PTR get_kernel32()
 #endif // !_WIN64
 
 // BKDhash
-// ¼ÆËã×Ö·û´®hash
+// è®¡ç®—å­—ç¬¦ä¸²hash
 uint32_t calc_hash(char* str)
 {
 	uint32_t seed = 131; // 31 131 1313 13131 131313 etc..
@@ -96,7 +96,7 @@ void* get_export_byhash(HMODULE module, uint32_t func_hash, T_GetProcAddress get
 
 		if (exportDir->NumberOfNames)
 		{
-			fn = (uint32_t*)((char*)module + exportDir->AddressOfNames); // µ¼³öÃû³Æ
+			fn = (uint32_t*)((char*)module + exportDir->AddressOfNames); // å¯¼å‡ºåç§°
 			fa = (uint32_t*)((char*)module + exportDir->AddressOfFunctions);
 			ford = (uint16_t*)((char*)module + exportDir->AddressOfNameOrdinals);
 
@@ -114,7 +114,7 @@ void* get_export_byhash(HMODULE module, uint32_t func_hash, T_GetProcAddress get
 	return 0;
 }
 
-// ±ÜÃâloadlibrayµÄŞÏŞÎ£¬Í¨¹ıµ¼Èë±íÖ±½Ó»ñÈ¡º¯ÊıµØÖ·
+// é¿å…loadlibrayçš„å°´å°¬ï¼Œé€šè¿‡å¯¼å…¥è¡¨ç›´æ¥è·å–å‡½æ•°åœ°å€
 HMODULE get_import_module(DWORD hash, DWORD len)
 {
 	PPEB Peb;
@@ -127,8 +127,8 @@ HMODULE get_import_module(DWORD hash, DWORD len)
 	Peb = (PPEB)__readfsdword(0x30);
 #endif
 
-	// ½ûÓÃ VEH
-	Peb->EnvironmentUpdateCount = 1;
+	// ç¦ç”¨ VEH, bypass veh hook
+	// Peb->EnvironmentUpdateCount = 1;
 
 	ListHead = &(Peb->Ldr->InLoadOrderModuleList);
 	Current = ListHead->Flink;
@@ -151,7 +151,7 @@ HMODULE get_import_module(DWORD hash, DWORD len)
 typedef BOOL(__stdcall* pfnDllMain)(HMODULE, DWORD, LPVOID);
 void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** addr)
 {
-	// ¼ì²épe¸ñÊ½
+	// æ£€æŸ¥peæ ¼å¼
 	PIMAGE_NT_HEADERS nth;
 	PIMAGE_DOS_HEADER dosh = (PIMAGE_DOS_HEADER)dll;
 	PIMAGE_SECTION_HEADER section;
@@ -185,7 +185,7 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 	if (dll == 0) return 0;
 
 
-	// PE¸ñÊ½¼ì²é
+	// PEæ ¼å¼æ£€æŸ¥
 
 	if (dosh->e_magic != IMAGE_DOS_SIGNATURE) return 0;
 
@@ -203,11 +203,11 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 	if (0 == base) return 0;
 
 
-	// ¿½±´ dos ºÍ nt Í·
-	func->movemem(base, dll, nth->OptionalHeader.SizeOfHeaders);	// dos + nt + section_head ×Ü´óĞ¡
+	// æ‹·è´ dos å’Œ nt å¤´
+	func->movemem(base, dll, nth->OptionalHeader.SizeOfHeaders);	// dos + nt + section_head æ€»å¤§å°
 	section = (PIMAGE_SECTION_HEADER)((char*)nth + sizeof(IMAGE_NT_HEADERS));
 
-	// Ó³Éä½Ú
+	// æ˜ å°„èŠ‚
 	for (int i = 0; i < nth->FileHeader.NumberOfSections; i++)
 	{
 		if (section[i].VirtualAddress == 0) continue;
@@ -228,17 +228,17 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 		}
 	}
 
-	// ĞŞÖØ¶¨Î»
+	// ä¿®é‡å®šä½
 	data_dir = &nth->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
 	if (data_dir->VirtualAddress && data_dir->Size)
 	{
 		reloc = (PIMAGE_BASE_RELOCATION)((char*)base + data_dir->VirtualAddress);
-		while (reloc->VirtualAddress + reloc->SizeOfBlock)	// Ò»¸öÒ³
+		while (reloc->VirtualAddress + reloc->SizeOfBlock)	// ä¸€ä¸ªé¡µ
 		{
 			reloc_data = (uint16_t*)((char*)reloc + sizeof(IMAGE_BASE_RELOCATION));
 			nrelec = (reloc->SizeOfBlock - sizeof(*reloc)) / sizeof(uint16_t);
 
-			for (i = 0; i < nrelec; ++i)		// Ò³ÄÚĞèÒªÖØ¶¨Î»µÄÊı¾İµÄÖ¸Õë
+			for (i = 0; i < nrelec; ++i)		// é¡µå†…éœ€è¦é‡å®šä½çš„æ•°æ®çš„æŒ‡é’ˆ
 			{
 				if ((reloc_data[i] >> 12) == IMAGE_REL_BASED_HIGHLOW)
 				{
@@ -247,23 +247,23 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 					*target64 += (uint64_t)base - (uint64_t)nth->OptionalHeader.ImageBase;
 
 #else
-					target = (uint32_t*)((char*)base + reloc->VirtualAddress + (reloc_data[i] & 0x0FFF)); // Ò³ÄÚÆ«ÒÆ
+					target = (uint32_t*)((char*)base + reloc->VirtualAddress + (reloc_data[i] & 0x0FFF)); // é¡µå†…åç§»
 					*target += (uint32_t)base - (uint32_t)nth->OptionalHeader.ImageBase;
 #endif
 				}
 			}
-			reloc = (PIMAGE_BASE_RELOCATION)((char*)reloc + reloc->SizeOfBlock); // ÏÂ¸öÒ³
+			reloc = (PIMAGE_BASE_RELOCATION)((char*)reloc + reloc->SizeOfBlock); // ä¸‹ä¸ªé¡µ
 		}
 	}
 
-	// ĞŞµ¼Èë±í
+	// ä¿®å¯¼å…¥è¡¨
 	data_dir = &nth->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
 	if (data_dir->VirtualAddress && data_dir->Size)
 	{
 		imptb = (PIMAGE_IMPORT_DESCRIPTOR)((char*)base + data_dir->VirtualAddress);
 		for (; imptb->Name; ++imptb)
 		{
-			str = (char*)base + imptb->Name;	// dll Ãû³Æ
+			str = (char*)base + imptb->Name;	// dll åç§°
 			dll_base = func->loadlib(str);
 			if (dll_base)
 			{
@@ -272,12 +272,12 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 
 				for (; thunk->u1.AddressOfData; ++thunk, iat++)
 				{
-					// ĞòºÅµ¼Èë
+					// åºå·å¯¼å…¥
 					if (IMAGE_SNAP_BY_ORDINAL(thunk->u1.Ordinal))
 					{
-						str = (char*)IMAGE_ORDINAL(thunk->u1.Ordinal); // ĞòºÅ
+						str = (char*)IMAGE_ORDINAL(thunk->u1.Ordinal); // åºå·
 					}
-					else // Ãû³Æµ¼Èë
+					else // åç§°å¯¼å…¥
 					{
 						ibn = (PIMAGE_IMPORT_BY_NAME)((char*)base + thunk->u1.AddressOfData);
 						str = (char*)ibn->Name;
@@ -300,7 +300,7 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 		}
 	}
 
-	// ´¦Àí TLS
+	// å¤„ç† TLS
 	data_dir = &nth->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS];
 	if (data_dir->VirtualAddress)
 	{
@@ -313,14 +313,14 @@ void* mem_loaddll(NativeApi* func, void* dll, void* name, void* param, void** ad
 		}
 	}
 
-	// µ÷ÓÃÈë¿Úµãº¯Êı
+	// è°ƒç”¨å…¥å£ç‚¹å‡½æ•°
 	dllmain = (pfnDllMain)((char*)base + nth->OptionalHeader.AddressOfEntryPoint);
 	if (dllmain)
 	{
 		dllmain((HMODULE)base, DLL_PROCESS_ATTACH, param);
 	}
 
-	// µ÷ÓÃµ¼³öº¯Êı
+	// è°ƒç”¨å¯¼å‡ºå‡½æ•°
 	if (name)
 	{
 		*addr = get_export_byhash((HMODULE)base, (uint32_t)name, 0);
