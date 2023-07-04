@@ -2,12 +2,13 @@
  自用的shellcode生成框架
 
 ## 用法
-1. 自己写好功能函数
+1. 自己写好功能函数，在`_main`函数体里调用下
 2. 将函数名称放到 `order.txt` 文件里面`_main`前面即可
 3. 编译下,确认生成了exe文件
 4. 执行 `babysc -g shellcode导出文件`, 将你写的功能函数提取出来到sc.bin
 5. 验证,  通过 `babysc -e shellcode导出文件`，执行下观察是否达到预期
 
+原理：将 main_entry main_end 两个函数地址之间的内存数据（opcode） dump出来（顺序在order.txt里面定义好了）作为shellcode
 
 ### 以`winexe`方式命令执行为例说明
 
