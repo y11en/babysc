@@ -66,7 +66,7 @@ void build_shellcode(char* outfile)
 }
 
 
-void RunSC(const char* path)
+void exec_shellcode(const char* path)
 {
 	const char* buff = 0;
 	void* Ep = 0;
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 
 	else if (!strcmp(argv[1], "-e"))
 	{
-		RunSC(argv[2]);
+		exec_shellcode(argv[2]);
 	}
 	return 0;
 
