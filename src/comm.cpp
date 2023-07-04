@@ -12,7 +12,7 @@ void init_api(NativeApi* func)
 {
 	HMODULE kernel32;
 	HMODULE ntdll;
-	BYTE ntdll_dll[] = { 110, 116, 100, 108, 108, 46, 100, 108, 108, 0x00};
+	BYTE ntdll_dll[] = { 110, 116, 100, 108, 108, 46, 100, 108, 108, 0};
 	BYTE str_kernel32[] = { 107, 101, 114, 110, 101, 108, 51, 50, 46, 100, 108, 108 , 0};
 
 	func->kernel32 = kernel32 = (HMODULE)get_kernel32();
