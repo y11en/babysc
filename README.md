@@ -51,7 +51,15 @@ main_end
 
 ```
 
-3. 编译，执行下
+3. 在`_main`里面调用下，然后编译执行
+```C
+
+void* _main(){
+	sc_exec();
+	return 0;
+}
+
+```
 
 ![演示](demo.png)
 
