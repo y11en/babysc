@@ -10,7 +10,7 @@
 
 原理：将 `main_entry` `main_end` 两个函数地址之间的内存数据（opcode） dump出来（顺序在order.txt里面定义好了）作为shellcode
 
-### 以`winexe`方式命令执行为例说明
+### 以`WinExec`方式命令执行为例说明
 
 1. 先完成功能函数
 
